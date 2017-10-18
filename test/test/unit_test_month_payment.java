@@ -12,8 +12,8 @@ class unit_test_month_payment
 	final void test() 
 	{
 		double payment = 0;
-		finance month_payment = new finance();
-		month_payment.calculateMonthlyPayment(10000, 60, 3);
+		finance month_payment = new finance("10000", "60", "3", "");
+//		month_payment.calculateMonthlyPayment(10000, 60, 3);
 		payment = month_payment.getPayment();
 		assertEquals(179.69, payment, 0.01); // TODO
 	}

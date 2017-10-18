@@ -91,18 +91,19 @@ public class LoanCalculator {
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				int months;
-				double capital_amount;
-				double apr;
-				double monthly_payment;
+				String months;
+				String capital_amount;
+				String apr;
+				String monthly_payment;
 				try
 				{
-					months = Integer.parseInt(months_textbox.getText());
-					capital_amount = Double.parseDouble(CapitalAmount_textbox.getText());
-					apr = Double.parseDouble(APR_textbox.getText());
-					//monthly_payment = Double.parseDouble(MonthlyPayment_textbox.getText());
-					finance payment = new finance();
-					payment.calculateMonthlyPayment(capital_amount, months, apr);
+					months = months_textbox.getText();
+					capital_amount = CapitalAmount_textbox.getText();
+					apr = APR_textbox.getText();
+					monthly_payment = MonthlyPayment_textbox.getText();
+					
+					finance payment = new finance(capital_amount, months, apr, monthly_payment);
+					
 					MonthlyPayment_textbox.setText(payment.toString());
 					
 				}catch(Exception e)
