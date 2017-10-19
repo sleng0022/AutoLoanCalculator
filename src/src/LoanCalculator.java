@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import java.text.spi.*;
+import java.awt.print.*;
 
 public class LoanCalculator {
 
@@ -57,7 +59,7 @@ public class LoanCalculator {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 614, 494);
+		frame.setBounds(100, 100, 614, 522);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -168,6 +170,23 @@ public class LoanCalculator {
 		scrollPane.setViewportView(table);
 		model.setColumnIdentifiers(columns);
 		table.setModel(model);
+		
+		JButton btnPrin = new JButton("Print");
+		btnPrin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				try
+				{
+					table.print(JTable.PrintMode.NORMAL);
+					
+				}catch(java.awt.print.PrinterException e)
+				{
+					System.err.format("Cannot print.");
+				}
+			}
+		});
+		btnPrin.setBounds(491, 465, 117, 29);
+		frame.getContentPane().add(btnPrin);
 		
 	}
 }
