@@ -28,6 +28,12 @@ class unit_test_month_payment
 		finance principle_amount = new finance("", "60", "3", "179.69");
 		cap_amount = principle_amount.getPayment();
 		assertEquals(10000.00, cap_amount, 1); // TODO
+		
+		/* Calculate APR value*/
+		double apr_rate = 0;
+		finance rate = new finance("10000", "60", "", "179.69");
+		apr_rate = rate.getPayment();
+		assertEquals(3.0, apr_rate, 1); // TODO
 	}
 
 }

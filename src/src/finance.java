@@ -12,6 +12,8 @@ public class finance
 	private double value;
 	private int monthly;
 	
+	private double fix_rate = 2.6;
+	
 	DecimalFormat df = new DecimalFormat("#.##");
 	
 	public finance(String capital_amount, String num_months, String apr, String monthly_payment)
@@ -31,7 +33,10 @@ public class finance
 			this.calculateMonths(amount,interest_rate,payment);
 		}else if (apr == "")
 		{
-			
+			amount = Double.parseDouble(capital_amount);
+			months = Integer.parseInt(num_months);
+			payment = Double.parseDouble(monthly_payment);
+			this.calculateAPR(amount, months, fix_rate ,payment);
 			
 		}else if (monthly_payment == "")
 		{
@@ -68,6 +73,29 @@ public class finance
 		
 		value = (amount/yearly_interest_rate)*(1-(Math.pow(1+yearly_interest_rate,-months)));
 		df.format(value); 
+	}
+	
+	public void calculateAPR(double capital_amount, int monthly, double apr, double monthly_payment)
+	{
+		double calculate_monthly_payment;
+		double yearly_interest_rate;
+		yearly_interest_rate = (apr/100)/12;
+		
+		calculate_monthly_payment = (yearly_interest_rate * capital_amount)/(1-(Math.pow(1+yearly_interest_rate,-monthly)));
+		
+		if(Math.abs((calculate_monthly_payment - monthly_payment)) <= 0.02)
+		{
+			value = yearly_interest_rate * 12 * 100;
+			df.format(value);
+		}else if(calculate_monthly_payment < monthly_payment)
+		{
+			this.calculateAPR(amount, months, fix_rate+=0.01, payment);
+		}else
+		{
+			this.calculateAPR(amount, months, fix_rate-=0.01, payment);
+		}
+		
+		 
 	}
 	
 	public double getPayment()

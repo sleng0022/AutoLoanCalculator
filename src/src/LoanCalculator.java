@@ -119,6 +119,10 @@ public class LoanCalculator {
 						finance principle_amount = new finance("", months, apr, monthly_payment);
 						CapitalAmount_textbox.setText(principle_amount.toString());
 								
+					}else if(apr.isEmpty())
+					{
+						finance apr_rate = new finance(capital_amount, months, "", monthly_payment);
+						APR_textbox.setText(apr_rate.toString());
 					}
 					
 				}catch(Exception e)
