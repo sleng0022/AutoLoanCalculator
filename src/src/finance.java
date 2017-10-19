@@ -19,7 +19,10 @@ public class finance
 		
 		if(capital_amount == "")
 		{
-			
+			amount = Double.parseDouble(monthly_payment);
+			months = Integer.parseInt(num_months);
+			interest_rate = Double.parseDouble(apr);
+			this.calculateCapitalAmount(months, interest_rate, amount);
 		}else if(num_months == "")
 		{
 			payment = Double.parseDouble(monthly_payment);
@@ -56,6 +59,15 @@ public class finance
 		yearly_interest_rate = (apr/100)/12;
 		value = (yearly_interest_rate * capital_amount)/(1-(Math.pow(1+yearly_interest_rate,-num_months)));
 		df.format(value);
+	}
+	
+	public void calculateCapitalAmount(int months, double apr, double amount)
+	{
+		double yearly_interest_rate;
+		yearly_interest_rate = (apr/100)/12;
+		
+		value = (amount/yearly_interest_rate)*(1-(Math.pow(1+yearly_interest_rate,-months)));
+		df.format(value); 
 	}
 	
 	public double getPayment()

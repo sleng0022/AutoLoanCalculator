@@ -3,11 +3,13 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTable;
 
 public class LoanCalculator {
 
@@ -16,6 +18,8 @@ public class LoanCalculator {
 	private JTextField months_textbox;
 	private JTextField APR_textbox;
 	private JTextField MonthlyPayment_textbox;
+	private JButton btnAddToGrid;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -45,7 +49,7 @@ public class LoanCalculator {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 450, 281);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -110,6 +114,11 @@ public class LoanCalculator {
 					{
 						finance mps = new finance(capital_amount, "", apr,monthly_payment);
 						months_textbox.setText(mps.monthtoString());
+					}else if(capital_amount.isEmpty())
+					{
+						finance principle_amount = new finance("", months, apr, monthly_payment);
+						CapitalAmount_textbox.setText(principle_amount.toString());
+								
 					}
 					
 				}catch(Exception e)
@@ -120,5 +129,26 @@ public class LoanCalculator {
 		});
 		btnCalculate.setBounds(327, 210, 117, 29);
 		frame.getContentPane().add(btnCalculate);
+		
+		btnAddToGrid = new JButton("Add to Grid");
+		btnAddToGrid.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				try
+				{
+					table = new JTable();
+					
+				}catch(Exception e)
+				{
+					
+				}
+			}
+		});
+		btnAddToGrid.setBounds(198, 210, 117, 29);
+		frame.getContentPane().add(btnAddToGrid);
+		
+		Object columnNames[] = {"Capital Amount", "Months", "APR", "Monthly Payment"};
+		Object rowNames[][] = {};
 	}
 }
