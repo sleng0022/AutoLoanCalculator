@@ -100,11 +100,17 @@ public class LoanCalculator {
 					months = months_textbox.getText();
 					capital_amount = CapitalAmount_textbox.getText();
 					apr = APR_textbox.getText();
-					monthly_payment = MonthlyPayment_textbox.getText();
+					monthly_payment = MonthlyPayment_textbox.getText();					
 					
-					finance payment = new finance(capital_amount, months, apr, monthly_payment);
-					
-					MonthlyPayment_textbox.setText(payment.toString());
+					if(monthly_payment.isEmpty())
+					{
+						finance payment = new finance(capital_amount, months, apr, "");
+						MonthlyPayment_textbox.setText(payment.toString());
+					}else if(months.isEmpty())
+					{
+						finance mps = new finance(capital_amount, "", apr,monthly_payment);
+						months_textbox.setText(mps.monthtoString());
+					}
 					
 				}catch(Exception e)
 				{
