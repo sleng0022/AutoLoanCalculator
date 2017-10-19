@@ -1,4 +1,5 @@
 package src;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,6 +11,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
+import javax.swing.JScrollPane;
 
 public class LoanCalculator {
 
@@ -20,7 +22,9 @@ public class LoanCalculator {
 	private JTextField MonthlyPayment_textbox;
 	private JButton btnAddToGrid;
 	private JTable table;
-
+	
+	Object[] columns  = {"Capital Amount", "Months", "APR", "Monthly Payment"};
+	DefaultTableModel model = new DefaultTableModel ();
 	/**
 	 * Launch the application.
 	 */
@@ -28,8 +32,12 @@ public class LoanCalculator {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
 					LoanCalculator window = new LoanCalculator();
 					window.frame.setVisible(true);
+					
+					
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -49,7 +57,7 @@ public class LoanCalculator {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 281);
+		frame.setBounds(100, 100, 614, 494);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -131,7 +139,7 @@ public class LoanCalculator {
 				}
 			}
 		});
-		btnCalculate.setBounds(327, 210, 117, 29);
+		btnCalculate.setBounds(491, 226, 117, 29);
 		frame.getContentPane().add(btnCalculate);
 		
 		btnAddToGrid = new JButton("Add to Grid");
@@ -141,7 +149,7 @@ public class LoanCalculator {
 			{
 				try
 				{
-					table = new JTable();
+					model.addRow(new Object[] {CapitalAmount_textbox.getText(), months_textbox.getText(),APR_textbox.getText(), MonthlyPayment_textbox.getText()});
 					
 				}catch(Exception e)
 				{
@@ -149,10 +157,17 @@ public class LoanCalculator {
 				}
 			}
 		});
-		btnAddToGrid.setBounds(198, 210, 117, 29);
+		btnAddToGrid.setBounds(372, 226, 117, 29);
 		frame.getContentPane().add(btnAddToGrid);
 		
-		Object columnNames[] = {"Capital Amount", "Months", "APR", "Monthly Payment"};
-		Object rowNames[][] = {};
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(6, 267, 602, 199);
+		frame.getContentPane().add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		model.setColumnIdentifiers(columns);
+		table.setModel(model);
+		
 	}
 }
