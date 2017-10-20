@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
-import java.text.spi.*;
+import java.text.*;
 import java.awt.print.*;
 
 public class LoanCalculator {
@@ -175,13 +175,15 @@ public class LoanCalculator {
 		btnPrin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				MessageFormat header = new MessageFormat("Loan Calculator Print");
+				MessageFormat footer = new MessageFormat("Page {0, number, integer}") ;
 				try
 				{
-					table.print(JTable.PrintMode.NORMAL);
+					table.print(JTable.PrintMode.NORMAL, header, footer);
 					
 				}catch(java.awt.print.PrinterException e)
 				{
-					System.err.format("Cannot print.");
+					System.err.format("Cannot print.", e.getMessage());
 				}
 			}
 		});
