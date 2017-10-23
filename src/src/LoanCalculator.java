@@ -25,8 +25,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ChangeEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+
 
 public class LoanCalculator {
 
@@ -118,18 +117,20 @@ public class LoanCalculator {
 		frame.getContentPane().add(lblMonthlyPayment);
 		
 		/* Calculation button start here */
-		
 		JButton btnCalculate = new JButton("Calculate");
 		ButtonModel mod = btnCalculate.getModel();
+		ButtonEnable btnEnable = new ButtonEnable(mod);
+		
 		Document doc1 = CapitalAmount_textbox.getDocument();
 		Document doc2 = months_textbox.getDocument();
 		Document doc3 = APR_textbox.getDocument();
+		Document doc4 = MonthlyPayment_textbox.getDocument();
 		
-		ButtonEnable btnEnable = new ButtonEnable(mod);
 		btnEnable.addDocument(doc1);
 		btnEnable.addDocument(doc2);
 		btnEnable.addDocument(doc3);
-	
+		btnEnable.addDocument(doc4);
+		btnEnable.documentChanged();
 		
 		btnCalculate.addActionListener(new ActionListener()
 		{
@@ -246,6 +247,7 @@ public class LoanCalculator {
 		
 	}
 	
+	/* Check all the text field is filled with at least 3 textboxes. */
 	public class ButtonEnable implements DocumentListener
 	{
 		private ButtonModel btnMod;
@@ -260,13 +262,17 @@ public class LoanCalculator {
 		{
 			doc.addDocumentListener(this);
 			this.documents.add(doc);
-			documentChanged();
+			//documentChanged();
 		}
 		
 		public void documentChanged()
 		{
 			boolean btnEnable = false;
-			if((documents.get(0).getLength() >0) && (documents.get(1).getLength() > 0) && (documents.get(2).getLength() > 0))
+
+			if((documents.get(0).getLength() >0 && documents.get(1).getLength() > 0 && documents.get(2).getLength() > 0) || 
+			   (documents.get(0).getLength() >0 && documents.get(1).getLength() > 0 && documents.get(3).getLength() > 0) ||
+			   (documents.get(0).getLength() >0 && documents.get(2).getLength() > 0 && documents.get(3).getLength() > 0) || 
+			   (documents.get(1).getLength() >0 && documents.get(2).getLength() > 0 && documents.get(3).getLength() > 0))
 			{
 				btnEnable = true;
 			}
