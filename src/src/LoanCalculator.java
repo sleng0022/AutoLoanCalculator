@@ -6,16 +6,27 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.Document;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.text.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.print.*;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ChangeEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class LoanCalculator {
 
@@ -26,6 +37,11 @@ public class LoanCalculator {
 	private JTextField MonthlyPayment_textbox;
 	private JButton btnAddToGrid;
 	private JTable table;
+	boolean cap_amt_empty_txt = false;
+	boolean months_empty_txt = false;
+	boolean apr_rate_empty_txt = false;
+	boolean monthly_payment_txt = false;
+	
 	
 	Object[] columns  = {"Capital Amount($)", "Months", "APR(%)", "Monthly Payment($)"};
 	DefaultTableModel model = new DefaultTableModel ();
@@ -51,7 +67,7 @@ public class LoanCalculator {
 	 * Create the application.
 	 */
 	public LoanCalculator() {
-		initialize();
+			initialize();
 	}
 
 	/**
@@ -64,6 +80,8 @@ public class LoanCalculator {
 		frame.getContentPane().setLayout(null);
 		
 		CapitalAmount_textbox = new JTextField();
+	
+	
 		CapitalAmount_textbox.setBounds(244, 24, 130, 26);
 		frame.getContentPane().add(CapitalAmount_textbox);
 		CapitalAmount_textbox.setColumns(10);
@@ -99,8 +117,20 @@ public class LoanCalculator {
 		lblMonthlyPayment.setBounds(103, 143, 112, 16);
 		frame.getContentPane().add(lblMonthlyPayment);
 		
-		/**/
+		/* Calculation button start here */
+		
 		JButton btnCalculate = new JButton("Calculate");
+		ButtonModel mod = btnCalculate.getModel();
+		Document doc1 = CapitalAmount_textbox.getDocument();
+		Document doc2 = months_textbox.getDocument();
+		Document doc3 = APR_textbox.getDocument();
+		
+		ButtonEnable btnEnable = new ButtonEnable(mod);
+		btnEnable.addDocument(doc1);
+		btnEnable.addDocument(doc2);
+		btnEnable.addDocument(doc3);
+	
+		
 		btnCalculate.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0) 
@@ -109,6 +139,7 @@ public class LoanCalculator {
 				String capital_amount;
 				String apr;
 				String monthly_payment;
+				
 				try
 				{
 					months = months_textbox.getText();
@@ -140,10 +171,14 @@ public class LoanCalculator {
 					JOptionPane.showMessageDialog(null, "Please Enter Valid Number");
 				}
 			}
+			
+			
 		});
 		btnCalculate.setBounds(491, 226, 117, 29);
 		frame.getContentPane().add(btnCalculate);
 		
+		
+		/* Add to grid button starts here. */ 
 		btnAddToGrid = new JButton("Add to Grid");
 		btnAddToGrid.addActionListener(new ActionListener() 
 		{
@@ -171,6 +206,8 @@ public class LoanCalculator {
 		model.setColumnIdentifiers(columns);
 		table.setModel(model);
 		
+		
+		/* Print button starts here */
 		JButton btnPrin = new JButton("Print");
 		btnPrin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) 
@@ -187,6 +224,7 @@ public class LoanCalculator {
 				}
 			}
 		});
+		
 		btnPrin.setBounds(491, 465, 117, 29);
 		frame.getContentPane().add(btnPrin);
 		
@@ -205,6 +243,53 @@ public class LoanCalculator {
 		JLabel lblMonth = new JLabel("month");
 		lblMonth.setBounds(376, 67, 41, 16);
 		frame.getContentPane().add(lblMonth);
+		
+	}
+	
+	public class ButtonEnable implements DocumentListener
+	{
+		private ButtonModel btnMod;
+		private List<Document> documents  = new ArrayList<Document>();
+		
+		public ButtonEnable(ButtonModel btnMod)
+		{
+			this.btnMod = btnMod;
+		}
+		
+		public void addDocument(Document doc)
+		{
+			doc.addDocumentListener(this);
+			this.documents.add(doc);
+			documentChanged();
+		}
+		
+		public void documentChanged()
+		{
+			boolean btnEnable = false;
+			if((documents.get(0).getLength() >0) && (documents.get(1).getLength() > 0) && (documents.get(2).getLength() > 0))
+			{
+				btnEnable = true;
+			}
+			btnMod.setEnabled(btnEnable);
+		}
+		
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			documentChanged();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			documentChanged();
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			documentChanged();
+		}
 		
 	}
 }
