@@ -1,6 +1,7 @@
 package src;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -14,6 +15,7 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.text.*;
 import java.awt.print.*;
+import javax.swing.ScrollPaneConstants;
 
 public class LoanCalculator {
 
@@ -37,9 +39,7 @@ public class LoanCalculator {
 					
 					LoanCalculator window = new LoanCalculator();
 					window.frame.setVisible(true);
-					
-					
-					
+	
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -118,20 +118,20 @@ public class LoanCalculator {
 					
 					if(monthly_payment.isEmpty())
 					{
-						finance payment = new finance(capital_amount, months, apr, "");
+						Finance payment = new Finance(capital_amount, months, apr, "");
 						MonthlyPayment_textbox.setText(payment.toString());
 					}else if(months.isEmpty())
 					{
-						finance mps = new finance(capital_amount, "", apr,monthly_payment);
+						Finance mps = new Finance(capital_amount, "", apr,monthly_payment);
 						months_textbox.setText(mps.monthtoString());
 					}else if(capital_amount.isEmpty())
 					{
-						finance principle_amount = new finance("", months, apr, monthly_payment);
+						Finance principle_amount = new Finance("", months, apr, monthly_payment);
 						CapitalAmount_textbox.setText(principle_amount.toString());
 								
 					}else if(apr.isEmpty())
 					{
-						finance apr_rate = new finance(capital_amount, months, "", monthly_payment);
+						Finance apr_rate = new Finance(capital_amount, months, "", monthly_payment);
 						APR_textbox.setText(apr_rate.toString());
 					}
 					
@@ -155,7 +155,7 @@ public class LoanCalculator {
 					
 				}catch(Exception e)
 				{
-					
+					System.out.println("Invalid Data to Add into Grid");
 				}
 			}
 		});
