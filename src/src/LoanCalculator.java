@@ -27,7 +27,7 @@ public class LoanCalculator {
 	private JButton btnAddToGrid;
 	private JTable table;
 	
-	Object[] columns  = {"Capital Amount", "Months", "APR", "Monthly Payment"};
+	Object[] columns  = {"Capital Amount($)", "Months", "APR(%)", "Monthly Payment($)"};
 	DefaultTableModel model = new DefaultTableModel ();
 	/**
 	 * Launch the application.
@@ -151,7 +151,7 @@ public class LoanCalculator {
 			{
 				try
 				{
-					model.addRow(new Object[] {CapitalAmount_textbox.getText(), months_textbox.getText(),APR_textbox.getText(), MonthlyPayment_textbox.getText()});
+					model.addRow(new Object[] {CapitalAmount_textbox.getText(), months_textbox.getText(), APR_textbox.getText(), MonthlyPayment_textbox.getText()});
 					
 				}catch(Exception e)
 				{
@@ -189,6 +189,22 @@ public class LoanCalculator {
 		});
 		btnPrin.setBounds(491, 465, 117, 29);
 		frame.getContentPane().add(btnPrin);
+		
+		JLabel lblNewLabel = new JLabel("$");
+		lblNewLabel.setBounds(377, 29, 13, 16);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JLabel label = new JLabel("$");
+		label.setBounds(377, 143, 13, 16);
+		frame.getContentPane().add(label);
+		
+		JLabel label_1 = new JLabel("%");
+		label_1.setBounds(377, 105, 13, 16);
+		frame.getContentPane().add(label_1);
+		
+		JLabel lblMonth = new JLabel("month");
+		lblMonth.setBounds(376, 67, 41, 16);
+		frame.getContentPane().add(lblMonth);
 		
 	}
 }
