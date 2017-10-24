@@ -25,7 +25,14 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ChangeEvent;
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.border.*;
+import javax.swing.BorderFactory;
 
 public class LoanCalculator {
 
@@ -40,7 +47,7 @@ public class LoanCalculator {
 	boolean months_empty_txt = false;
 	boolean apr_rate_empty_txt = false;
 	boolean monthly_payment_txt = false;
-	
+	private boolean invalid_input = false;
 	
 	Object[] columns  = {"Capital Amount($)", "Months", "APR(%)", "Monthly Payment($)"};
 	DefaultTableModel model = new DefaultTableModel ();
@@ -78,24 +85,132 @@ public class LoanCalculator {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		/* Calculation button start here */
+		JButton btnCalculate = new JButton("Calculate");
+		ButtonModel mod = btnCalculate.getModel();
+		ButtonEnable btnEnable = new ButtonEnable(mod);
+		
+		/* Border Line */
+		Border InvalidInputBorder = BorderFactory.createLineBorder(Color.RED);
+		Border ValidInputBorder = BorderFactory.createLineBorder(Color.GRAY);
+		
+		/* Initialize Capital Amount textbox */
 		CapitalAmount_textbox = new JTextField();
-	
-	
+		CapitalAmount_textbox.setForeground(Color.BLACK);
+		CapitalAmount_textbox.addMouseMotionListener(new MouseMotionAdapter() 
+		{
+			@Override
+			public void mouseMoved(MouseEvent e) 
+			{
+				CapitalAmount_textbox.setToolTipText("Capital Amount cannot be $0");
+			}
+		});
 		CapitalAmount_textbox.setBounds(244, 24, 130, 26);
 		frame.getContentPane().add(CapitalAmount_textbox);
 		CapitalAmount_textbox.setColumns(10);
 		
+		CapitalAmount_textbox.addKeyListener(new KeyAdapter() 
+		{
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
+				if(Double.parseDouble(CapitalAmount_textbox.getText()) == 0)
+				{
+					CapitalAmount_textbox.setBorder(InvalidInputBorder);
+					invalid_input = true;
+				}else
+				{
+					CapitalAmount_textbox.setBorder(ValidInputBorder);
+					invalid_input = false;
+				}
+			}
+		});
+		
+		/* Initialize months textbox */
 		months_textbox = new JTextField();
+		months_textbox.addKeyListener(new KeyAdapter() 
+		{
+			@Override
+			public void keyReleased(KeyEvent e) 
+			{
+				if(Integer.parseInt(months_textbox.getText()) >= 12 && Integer.parseInt(months_textbox.getText()) <= 72 && !months_textbox.getText().isEmpty())
+				{
+					months_textbox.setBorder(ValidInputBorder);
+					invalid_input = false;
+				}else
+				{
+					months_textbox.setBorder(InvalidInputBorder);
+					invalid_input = true;
+				}
+			}
+		});
+		months_textbox.addMouseMotionListener(new MouseMotionAdapter()
+		{
+			@Override
+			public void mouseMoved(MouseEvent e) 
+			{
+				months_textbox.setToolTipText("Months must be between 12-72 months");
+			}
+		});
 		months_textbox.setBounds(244, 62, 130, 26);
 		frame.getContentPane().add(months_textbox);
 		months_textbox.setColumns(10);
 		
+		/* Initialize APR textbox */
 		APR_textbox = new JTextField();
+		APR_textbox.addKeyListener(new KeyAdapter() 
+		{
+			@Override
+			public void keyReleased(KeyEvent e) 
+			{
+				if(Integer.parseInt(APR_textbox.getText()) >= 0 && Integer.parseInt(APR_textbox.getText()) <= 75)
+				{
+					APR_textbox.setBorder(ValidInputBorder);
+					invalid_input = false;
+				}else
+				{
+					APR_textbox.setBorder(InvalidInputBorder);
+					invalid_input = true;
+				}
+			}
+		});
+		APR_textbox.addMouseMotionListener(new MouseMotionAdapter() 
+		{
+			@Override
+			public void mouseMoved(MouseEvent e) 
+			{
+				APR_textbox.setToolTipText("APR must be between 0-72%");
+			}
+		});
 		APR_textbox.setBounds(244, 100, 130, 26);
 		frame.getContentPane().add(APR_textbox);
 		APR_textbox.setColumns(10);
 		
+		/* Initialize monthly payment textbox */
 		MonthlyPayment_textbox = new JTextField();
+		MonthlyPayment_textbox.addKeyListener(new KeyAdapter() 
+		{
+			@Override
+			public void keyReleased(KeyEvent e) 
+			{
+				if(Double.parseDouble(MonthlyPayment_textbox.getText()) == 0)
+				{
+					MonthlyPayment_textbox.setBorder(InvalidInputBorder);
+					invalid_input = true;
+				}else
+				{
+					MonthlyPayment_textbox.setBorder(ValidInputBorder);
+					invalid_input = false;
+				}
+			}
+		});
+		MonthlyPayment_textbox.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) 
+			{
+				MonthlyPayment_textbox.setToolTipText("Monthly payment amount");
+			}
+		});
 		MonthlyPayment_textbox.setBounds(244, 138, 130, 26);
 		frame.getContentPane().add(MonthlyPayment_textbox);
 		MonthlyPayment_textbox.setColumns(10);
@@ -116,11 +231,7 @@ public class LoanCalculator {
 		lblMonthlyPayment.setBounds(103, 143, 112, 16);
 		frame.getContentPane().add(lblMonthlyPayment);
 		
-		/* Calculation button start here */
-		JButton btnCalculate = new JButton("Calculate");
-		ButtonModel mod = btnCalculate.getModel();
-		ButtonEnable btnEnable = new ButtonEnable(mod);
-		
+		/* Verify at least 3 input */
 		Document doc1 = CapitalAmount_textbox.getDocument();
 		Document doc2 = months_textbox.getDocument();
 		Document doc3 = APR_textbox.getDocument();
@@ -274,7 +385,11 @@ public class LoanCalculator {
 			   (documents.get(0).getLength() >0 && documents.get(2).getLength() > 0 && documents.get(3).getLength() > 0) || 
 			   (documents.get(1).getLength() >0 && documents.get(2).getLength() > 0 && documents.get(3).getLength() > 0))
 			{
-				btnEnable = true;
+				if(invalid_input == false)
+				{
+					btnEnable = true;	
+				}
+						
 			}
 			btnMod.setEnabled(btnEnable);
 		}

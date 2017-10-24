@@ -12,9 +12,17 @@ public final class Loan
 		double payment_ratio;
 		int monthly;
 		
-		payment_ratio = (yearly_interest_rate * capital_amount)/(monthly_payment);
+		if(apr == 0)
+		{
+			monthly = (int)Math.round(capital_amount/monthly_payment);
+		}else
+		{
+			payment_ratio = (yearly_interest_rate * capital_amount)/(monthly_payment);
+			
+			monthly = (int)Math.round((-Math.log(1-payment_ratio))/Math.log(1+yearly_interest_rate));
+		}
 		
-		monthly = (int)Math.round((-Math.log(1-payment_ratio))/Math.log(1+yearly_interest_rate));
+		
 		
 		return monthly;
 	}
@@ -43,8 +51,13 @@ public final class Loan
 		
 		yearly_interest_rate = (apr/100)/12;
 		
-		value = (amount/yearly_interest_rate)*(1-(Math.pow(1+yearly_interest_rate,-months)));
-		
+		if(apr == 0)
+		{
+			value = amount * months;
+		}else
+		{
+			value = (amount/yearly_interest_rate)*(1-(Math.pow(1+yearly_interest_rate,-months)));
+		}
 		return value;
 	}
 	
