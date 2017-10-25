@@ -43,11 +43,12 @@ public class LoanCalculator {
 	private JTextField MonthlyPayment_textbox;
 	private JButton btnAddToGrid;
 	private JTable table;
-	boolean cap_amt_empty_txt = false;
-	boolean months_empty_txt = false;
-	boolean apr_rate_empty_txt = false;
-	boolean monthly_payment_txt = false;
-	private boolean invalid_input = false;
+	
+	private boolean invalid_cap_amt_txt = false;
+	private boolean invalid_months_txt = false;
+	private boolean invalid_apr_rate_txt = false;
+	private boolean invalid_monthly_payment_txt = false;
+	
 	
 	Object[] columns  = {"Capital Amount($)", "Months", "APR(%)", "Monthly Payment($)"};
 	DefaultTableModel model = new DefaultTableModel ();
@@ -114,14 +115,14 @@ public class LoanCalculator {
 			@Override
 			public void keyReleased(KeyEvent e)
 			{
-				if(Double.parseDouble(CapitalAmount_textbox.getText()) == 0)
+				if(Double.parseDouble(CapitalAmount_textbox.getText()) == 0 && CapitalAmount_textbox.getText() != "")
 				{
 					CapitalAmount_textbox.setBorder(InvalidInputBorder);
-					invalid_input = true;
+					invalid_cap_amt_txt = true;
 				}else
 				{
 					CapitalAmount_textbox.setBorder(ValidInputBorder);
-					invalid_input = false;
+					invalid_cap_amt_txt = false;
 				}
 			}
 		});
@@ -133,14 +134,14 @@ public class LoanCalculator {
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				if(Integer.parseInt(months_textbox.getText()) >= 12 && Integer.parseInt(months_textbox.getText()) <= 72 && !months_textbox.getText().isEmpty())
+				if(Integer.parseInt(months_textbox.getText()) >= 12 && Integer.parseInt(months_textbox.getText()) <= 72)
 				{
 					months_textbox.setBorder(ValidInputBorder);
-					invalid_input = false;
+					invalid_months_txt = false;
 				}else
 				{
 					months_textbox.setBorder(InvalidInputBorder);
-					invalid_input = true;
+					invalid_months_txt = true;
 				}
 			}
 		});
@@ -166,11 +167,11 @@ public class LoanCalculator {
 				if(Integer.parseInt(APR_textbox.getText()) >= 0 && Integer.parseInt(APR_textbox.getText()) <= 75)
 				{
 					APR_textbox.setBorder(ValidInputBorder);
-					invalid_input = false;
+					invalid_apr_rate_txt = false;
 				}else
 				{
 					APR_textbox.setBorder(InvalidInputBorder);
-					invalid_input = true;
+					invalid_apr_rate_txt = true;
 				}
 			}
 		});
@@ -196,11 +197,11 @@ public class LoanCalculator {
 				if(Double.parseDouble(MonthlyPayment_textbox.getText()) == 0)
 				{
 					MonthlyPayment_textbox.setBorder(InvalidInputBorder);
-					invalid_input = true;
+					invalid_monthly_payment_txt = true;
 				}else
 				{
 					MonthlyPayment_textbox.setBorder(ValidInputBorder);
-					invalid_input = false;
+					invalid_monthly_payment_txt = false;
 				}
 			}
 		});
@@ -259,28 +260,52 @@ public class LoanCalculator {
 					apr = APR_textbox.getText();
 					monthly_payment = MonthlyPayment_textbox.getText();					
 					
-					if(monthly_payment.isEmpty())
-					{
-						Finance payment = new Finance(capital_amount, months, apr, "");
-						MonthlyPayment_textbox.setText(payment.toString());
-					}else if(months.isEmpty())
+					if(months.isEmpty())
 					{
 						Finance mps = new Finance(capital_amount, "", apr,monthly_payment);
-						months_textbox.setText(mps.monthtoString());
+						if(mps.CheckInValidNumber() == true)
+						{
+							throw new Exception();
+						}else
+						{
+							months_textbox.setText(mps.monthtoString());
+						}
 					}else if(capital_amount.isEmpty())
 					{
 						Finance principle_amount = new Finance("", months, apr, monthly_payment);
-						CapitalAmount_textbox.setText(principle_amount.toString());
+						if(principle_amount.CheckInValidNumber() == true)
+						{
+							throw new Exception();
+						}else
+						{
+							CapitalAmount_textbox.setText(principle_amount.toString());
+						}
 								
 					}else if(apr.isEmpty())
 					{
 						Finance apr_rate = new Finance(capital_amount, months, "", monthly_payment);
-						APR_textbox.setText(apr_rate.toString());
+						if(apr_rate.CheckInValidNumber() == true)
+						{
+							throw new Exception();
+						}else
+						{
+							APR_textbox.setText(apr_rate.toString());
+						}
+					}else
+					{
+						Finance payment = new Finance(capital_amount, months, apr, "");
+						if(payment.CheckInValidNumber() == true)
+						{
+							throw new Exception();
+						}else
+						{
+							MonthlyPayment_textbox.setText(payment.toString());
+						}
 					}
 					
 				}catch(Exception e)
 				{
-					JOptionPane.showMessageDialog(null, "Please Enter Valid Number");
+					JOptionPane.showMessageDialog(null, "InValid Number");
 				}
 			}
 			
@@ -328,7 +353,7 @@ public class LoanCalculator {
 				MessageFormat footer = new MessageFormat("Page {0, number, integer}") ;
 				try
 				{
-					table.print(JTable.PrintMode.NORMAL, header, footer);
+					table.print(JTable.PrintMode.FIT_WIDTH, header, footer);
 					
 				}catch(java.awt.print.PrinterException e)
 				{
@@ -376,6 +401,27 @@ public class LoanCalculator {
 			//documentChanged();
 		}
 		
+		void verifyInputValue(boolean valid)
+		{
+			if(valid == true)
+			{
+				if(((documents.get(0).getLength() > 0 && Double.parseDouble(CapitalAmount_textbox.getText()) == 0)) ||
+				   ((documents.get(1).getLength() > 0) && ((Integer.parseInt(months_textbox.getText()) < 12) || (Integer.parseInt(months_textbox.getText()) > 72))) ||
+				   ((documents.get(2).getLength() > 0) && (Double.parseDouble(APR_textbox.getText()) < 0 || Double.parseDouble(APR_textbox.getText()) > 75)) ||
+				   (documents.get(3).getLength() > 0 && (Double.parseDouble(MonthlyPayment_textbox.getText()) == 0)))
+				{
+					valid = false;
+				}else
+				{
+					valid = true;
+				}
+			}else
+			{
+				valid = false;
+			}
+			btnMod.setEnabled(valid);
+		}
+		
 		public void documentChanged()
 		{
 			boolean btnEnable = false;
@@ -385,13 +431,10 @@ public class LoanCalculator {
 			   (documents.get(0).getLength() >0 && documents.get(2).getLength() > 0 && documents.get(3).getLength() > 0) || 
 			   (documents.get(1).getLength() >0 && documents.get(2).getLength() > 0 && documents.get(3).getLength() > 0))
 			{
-				if(invalid_input == false)
-				{
-					btnEnable = true;	
-				}
-						
+				btnEnable = true;			
 			}
-			btnMod.setEnabled(btnEnable);
+			
+			verifyInputValue(btnEnable);
 		}
 		
 		@Override

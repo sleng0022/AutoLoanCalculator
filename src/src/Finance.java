@@ -11,41 +11,78 @@ public class Finance
 	
 	private double value;
 	private int monthly;
-	
+	private boolean invalid_num = false;
 	private double fix_rate = 2.6;
 	
 	DecimalFormat df = new DecimalFormat("#.##");
 	
 	public Finance(String capital_amount, String num_months, String apr, String monthly_payment)
 	{	
-		if(capital_amount == "")
+		try
 		{
-			amount = Double.parseDouble(monthly_payment);
-			months = Integer.parseInt(num_months);
-			interest_rate = Double.parseDouble(apr);
-			value = Loan.calculateCapitalAmount(months, interest_rate, amount);
-		}else if(num_months == "")
+			if(capital_amount == "")
+			{
+				amount = Double.parseDouble(monthly_payment);
+				months = Integer.parseInt(num_months);
+				interest_rate = Double.parseDouble(apr);
+				value = Loan.calculateCapitalAmount(months, interest_rate, amount);
+				if(value < 0)
+				{
+					invalid_num = true;
+				}else
+				{
+					invalid_num = false;
+				}
+			}else if(num_months == "")
+			{
+				payment = Double.parseDouble(monthly_payment);
+				amount = Double.parseDouble(capital_amount);
+				interest_rate = Double.parseDouble(apr);
+				monthly = Loan.calculateMonths(amount,interest_rate,payment);
+				if(monthly < 0)
+				{
+					invalid_num = true;
+				}else
+				{
+					invalid_num = false;
+				}
+			}else if (apr == "")
+			{
+				amount = Double.parseDouble(capital_amount);
+				months = Integer.parseInt(num_months);
+				payment = Double.parseDouble(monthly_payment);
+				value = Loan.calculateAPR(amount, months, fix_rate ,payment);
+				if(value < 0)
+				{
+					invalid_num = true;
+				}else
+				{
+					invalid_num = false;
+				}
+				
+			}else if (monthly_payment == "")
+			{
+				amount = Double.parseDouble(capital_amount);
+				months = Integer.parseInt(num_months);
+				interest_rate = Double.parseDouble(apr);
+				value = Loan.calculateMonthlyPayment(amount, months, interest_rate);
+				if(value < 0)
+				{
+					invalid_num = true;
+				}else
+				{
+					invalid_num = false;
+				}
+			}
+		}catch(Exception e)
 		{
-			payment = Double.parseDouble(monthly_payment);
-			amount = Double.parseDouble(capital_amount);
-			interest_rate = Double.parseDouble(apr);
-			monthly = Loan.calculateMonths(amount,interest_rate,payment);
-		}else if (apr == "")
-		{
-			amount = Double.parseDouble(capital_amount);
-			months = Integer.parseInt(num_months);
-			payment = Double.parseDouble(monthly_payment);
-			value = Loan.calculateAPR(amount, months, fix_rate ,payment);
-			
-		}else if (monthly_payment == "")
-		{
-			amount = Double.parseDouble(capital_amount);
-			months = Integer.parseInt(num_months);
-			interest_rate = Double.parseDouble(apr);
-			value = Loan.calculateMonthlyPayment(amount, months, interest_rate);
+			invalid_num = true;
 		}
 	}
-	
+	public boolean CheckInValidNumber()
+	{
+		return invalid_num;
+	}
 	
 	public double getPayment()
 	{
