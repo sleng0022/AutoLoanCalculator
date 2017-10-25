@@ -44,12 +44,6 @@ public class LoanCalculator {
 	private JButton btnAddToGrid;
 	private JTable table;
 	
-	private boolean invalid_cap_amt_txt = false;
-	private boolean invalid_months_txt = false;
-	private boolean invalid_apr_rate_txt = false;
-	private boolean invalid_monthly_payment_txt = false;
-	
-	
 	Object[] columns  = {"Capital Amount($)", "Months", "APR(%)", "Monthly Payment($)"};
 	DefaultTableModel model = new DefaultTableModel ();
 	/**
@@ -115,14 +109,12 @@ public class LoanCalculator {
 			@Override
 			public void keyReleased(KeyEvent e)
 			{
-				if(Double.parseDouble(CapitalAmount_textbox.getText()) == 0 && CapitalAmount_textbox.getText() != "")
+				if(Double.parseDouble(CapitalAmount_textbox.getText()) <= 0)
 				{
 					CapitalAmount_textbox.setBorder(InvalidInputBorder);
-					invalid_cap_amt_txt = true;
 				}else
 				{
-					CapitalAmount_textbox.setBorder(ValidInputBorder);
-					invalid_cap_amt_txt = false;
+					CapitalAmount_textbox.setBorder(ValidInputBorder);	
 				}
 			}
 		});
@@ -134,14 +126,12 @@ public class LoanCalculator {
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				if(Integer.parseInt(months_textbox.getText()) >= 12 && Integer.parseInt(months_textbox.getText()) <= 72)
+				if(((Integer.parseInt(months_textbox.getText()) < 12) || (Integer.parseInt(months_textbox.getText()) > 72)))
 				{
-					months_textbox.setBorder(ValidInputBorder);
-					invalid_months_txt = false;
+					months_textbox.setBorder(InvalidInputBorder);		
 				}else
 				{
-					months_textbox.setBorder(InvalidInputBorder);
-					invalid_months_txt = true;
+					months_textbox.setBorder(ValidInputBorder);
 				}
 			}
 		});
@@ -164,14 +154,12 @@ public class LoanCalculator {
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				if(Integer.parseInt(APR_textbox.getText()) >= 0 && Integer.parseInt(APR_textbox.getText()) <= 75)
-				{
-					APR_textbox.setBorder(ValidInputBorder);
-					invalid_apr_rate_txt = false;
-				}else
+				if((Double.parseDouble(APR_textbox.getText()) < 0 || Double.parseDouble(APR_textbox.getText()) > 75))
 				{
 					APR_textbox.setBorder(InvalidInputBorder);
-					invalid_apr_rate_txt = true;
+				}else
+				{
+					APR_textbox.setBorder(ValidInputBorder);
 				}
 			}
 		});
@@ -194,14 +182,14 @@ public class LoanCalculator {
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				if(Double.parseDouble(MonthlyPayment_textbox.getText()) == 0)
+				if(Double.parseDouble(MonthlyPayment_textbox.getText()) <= 0)
 				{
 					MonthlyPayment_textbox.setBorder(InvalidInputBorder);
-					invalid_monthly_payment_txt = true;
+					
 				}else
 				{
 					MonthlyPayment_textbox.setBorder(ValidInputBorder);
-					invalid_monthly_payment_txt = false;
+					
 				}
 			}
 		});
@@ -209,7 +197,7 @@ public class LoanCalculator {
 			@Override
 			public void mouseMoved(MouseEvent e) 
 			{
-				MonthlyPayment_textbox.setToolTipText("Monthly payment amount");
+				MonthlyPayment_textbox.setToolTipText("Monthly payment amount cannot be 0");
 			}
 		});
 		MonthlyPayment_textbox.setBounds(244, 138, 130, 26);
@@ -405,10 +393,10 @@ public class LoanCalculator {
 		{
 			if(valid == true)
 			{
-				if(((documents.get(0).getLength() > 0 && Double.parseDouble(CapitalAmount_textbox.getText()) == 0)) ||
+				if(((documents.get(0).getLength() > 0 && Double.parseDouble(CapitalAmount_textbox.getText()) <= 0)) ||
 				   ((documents.get(1).getLength() > 0) && ((Integer.parseInt(months_textbox.getText()) < 12) || (Integer.parseInt(months_textbox.getText()) > 72))) ||
 				   ((documents.get(2).getLength() > 0) && (Double.parseDouble(APR_textbox.getText()) < 0 || Double.parseDouble(APR_textbox.getText()) > 75)) ||
-				   (documents.get(3).getLength() > 0 && (Double.parseDouble(MonthlyPayment_textbox.getText()) == 0)))
+				   (documents.get(3).getLength() > 0 && (Double.parseDouble(MonthlyPayment_textbox.getText()) <= 0)))
 				{
 					valid = false;
 				}else

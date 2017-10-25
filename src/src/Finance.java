@@ -39,7 +39,7 @@ public class Finance
 				amount = Double.parseDouble(capital_amount);
 				interest_rate = Double.parseDouble(apr);
 				monthly = Loan.calculateMonths(amount,interest_rate,payment);
-				if(monthly < 0)
+				if(monthly < 12 || monthly > 72)
 				{
 					invalid_num = true;
 				}else
@@ -52,7 +52,7 @@ public class Finance
 				months = Integer.parseInt(num_months);
 				payment = Double.parseDouble(monthly_payment);
 				value = Loan.calculateAPR(amount, months, fix_rate ,payment);
-				if(value < 0)
+				if(value < 0 || value > 75)
 				{
 					invalid_num = true;
 				}else
