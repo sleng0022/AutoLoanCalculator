@@ -84,6 +84,22 @@ public final class Loan
 		return value;
 	}
 	
+	public static double calculateFinalPayment(double capital_amount, int months, double apr,double monthly_payment)
+	{
+		double value;
+		
+		if(apr == 0)
+		{
+			value = (capital_amount - (monthly_payment * months)) + (monthly_payment);
+			
+		}else
+		{
+			value = (monthly_payment * months) - (monthly_payment * (months-1));
+		}
+		
+		return value;
+	}
+	
 	public static double calculateAPR(double capital_amount, int monthly, double monthly_payment)
 	{
 		double calculate_monthly_payment;
@@ -93,7 +109,7 @@ public final class Loan
 		double end = 0;
 		double temp_monthly_payment;
 		
-		if(((monthly_payment * monthly) - capital_amount) < -0.001)
+		if(((monthly_payment * monthly) - capital_amount) < -0.06)
 		{
 			final_APR = -1;
 			return final_APR;

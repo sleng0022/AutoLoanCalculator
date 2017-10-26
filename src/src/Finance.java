@@ -77,6 +77,13 @@ public class Finance
 				{
 					invalid_num = false;
 				}
+			}else
+			{
+				amount = Double.parseDouble(capital_amount);
+				months = Integer.parseInt(num_months);
+				interest_rate = Double.parseDouble(apr);
+				payment =  Double.parseDouble(monthly_payment);
+				value = Loan.calculateFinalPayment(amount, months, interest_rate, payment);
 			}
 		}catch(Exception e)
 		{

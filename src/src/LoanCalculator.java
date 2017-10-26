@@ -37,7 +37,7 @@ public class LoanCalculator {
 	private JButton btnAddToGrid;
 	private JTable table;
 	
-	Object[] columns  = {"Capital Amount($)", "Months", "APR(%)", "Monthly Payment($)", "Last Monthly Payment($)"};
+	Object[] columns  = {"Capital Amount($)", "Months", "APR(%)", "Monthly Payment($)", "Final Monthly Payment($)"};
 	DefaultTableModel model = new DefaultTableModel ();
 	/**
 	 * Launch the application.
@@ -119,7 +119,7 @@ public class LoanCalculator {
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				if(((Integer.parseInt(months_textbox.getText()) < 12) || (Integer.parseInt(months_textbox.getText()) > 72)))
+				if((Integer.parseInt(months_textbox.getText()) < 12  || (Integer.parseInt(months_textbox.getText()) > 72)))
 				{
 					months_textbox.setBorder(InvalidInputBorder);		
 				}else
@@ -302,9 +302,23 @@ public class LoanCalculator {
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				String months;
+				String capital_amount;
+				String apr;
+				String monthly_payment;
+				String final_pay;
 				try
 				{
-					model.addRow(new Object[] {CapitalAmount_textbox.getText(), months_textbox.getText(), APR_textbox.getText(), MonthlyPayment_textbox.getText(), Math.round(Double.parseDouble(MonthlyPayment_textbox.getText()))});
+					months = months_textbox.getText();
+					capital_amount = CapitalAmount_textbox.getText();
+					apr = APR_textbox.getText();
+					monthly_payment = MonthlyPayment_textbox.getText();	
+					
+					Finance pay = new Finance(capital_amount, months, apr, monthly_payment);
+					
+					final_pay = pay.toString();
+					
+					model.addRow(new Object[] {CapitalAmount_textbox.getText(), months_textbox.getText(), APR_textbox.getText(), MonthlyPayment_textbox.getText(), final_pay});
 					
 				}catch(Exception e)
 				{
