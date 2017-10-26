@@ -44,7 +44,7 @@ public class LoanCalculator {
 	private JButton btnAddToGrid;
 	private JTable table;
 	
-	Object[] columns  = {"Capital Amount($)", "Months", "APR(%)", "Monthly Payment($)"};
+	Object[] columns  = {"Capital Amount($)", "Months", "APR(%)", "Monthly Payment($)", "Last Monthly Payment($)"};
 	DefaultTableModel model = new DefaultTableModel ();
 	/**
 	 * Launch the application.
@@ -76,7 +76,7 @@ public class LoanCalculator {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 614, 522);
+		frame.setBounds(100, 100, 724, 562);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -168,7 +168,7 @@ public class LoanCalculator {
 			@Override
 			public void mouseMoved(MouseEvent e) 
 			{
-				APR_textbox.setToolTipText("APR must be between 0-72%");
+				APR_textbox.setToolTipText("APR must be between 0-75%");
 			}
 		});
 		APR_textbox.setBounds(244, 100, 130, 26);
@@ -299,7 +299,7 @@ public class LoanCalculator {
 			
 			
 		});
-		btnCalculate.setBounds(491, 226, 117, 29);
+		btnCalculate.setBounds(601, 226, 117, 29);
 		frame.getContentPane().add(btnCalculate);
 		
 		
@@ -311,7 +311,7 @@ public class LoanCalculator {
 			{
 				try
 				{
-					model.addRow(new Object[] {CapitalAmount_textbox.getText(), months_textbox.getText(), APR_textbox.getText(), MonthlyPayment_textbox.getText()});
+					model.addRow(new Object[] {CapitalAmount_textbox.getText(), months_textbox.getText(), APR_textbox.getText(), MonthlyPayment_textbox.getText(), Math.round(Double.parseDouble(MonthlyPayment_textbox.getText()))});
 					
 				}catch(Exception e)
 				{
@@ -319,11 +319,11 @@ public class LoanCalculator {
 				}
 			}
 		});
-		btnAddToGrid.setBounds(372, 226, 117, 29);
+		btnAddToGrid.setBounds(487, 226, 117, 29);
 		frame.getContentPane().add(btnAddToGrid);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 267, 602, 199);
+		scrollPane.setBounds(6, 267, 712, 199);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
@@ -350,7 +350,7 @@ public class LoanCalculator {
 			}
 		});
 		
-		btnPrin.setBounds(491, 465, 117, 29);
+		btnPrin.setBounds(601, 478, 117, 29);
 		frame.getContentPane().add(btnPrin);
 		
 		JLabel lblNewLabel = new JLabel("$");
