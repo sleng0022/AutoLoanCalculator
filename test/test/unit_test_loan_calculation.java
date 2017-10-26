@@ -33,17 +33,17 @@ class unit_test_loan_calculation
 		
 		/* Calculate APR value*/
 		double apr_rate = 0;
-		apr_rate = Loan.calculateAPR(10000, 60, 3, 179.69);
+		apr_rate = Loan.calculateAPR(10000, 60, 179.69);
 		assertEquals(3, apr_rate, 1); // TODO
 		
 		/* Test negative number with apr */
 		double apr_rate_neg = 0;
-		apr_rate_neg = Loan.calculateAPR(10000, 12, 5, 500);
+		apr_rate_neg = Loan.calculateAPR(10000, 12,500);
 		assertEquals(-1, apr_rate_neg, 1); // TODO
 		
 		/* Test negative number with apr */
 		double apr_rate_75 = 0;
-		apr_rate_75 = Loan.calculateAPR(10000, 12, 5, 1209.17);
+		apr_rate_75 = Loan.calculateAPR(10000, 12, 1209.17);
 		assertEquals(75, apr_rate_75, 1); // TODO
 	}
 

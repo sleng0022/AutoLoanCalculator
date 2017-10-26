@@ -8,25 +8,31 @@ public final class Loan
 	public static int calculateMonths(double capital_amount, double apr, double monthly_payment)
 	{
 		double yearly_interest_rate;
-		yearly_interest_rate = (apr/100)/12;
 		double payment_ratio;
 		int monthly;
 		
-		if(monthly_payment > 0)
+		if(apr == 0)
 		{
-			payment_ratio = (yearly_interest_rate * capital_amount)/(monthly_payment);
+			monthly =  Math.round((int)(capital_amount / monthly_payment));
 		}else
 		{
-			payment_ratio = -1;
-		}
-		
-		if(Math.log(1+yearly_interest_rate) > 0)
-		{
-			monthly = (int)Math.round((-Math.log(1-payment_ratio))/Math.log(1+yearly_interest_rate));
-		}else
-		{
-			/* Error */
-			monthly = -1;
+			yearly_interest_rate = (apr/100)/12;
+			if(monthly_payment > 0)
+			{
+				payment_ratio = (yearly_interest_rate * capital_amount)/(monthly_payment);
+			}else
+			{
+				payment_ratio = -1;
+			}
+			
+			if(Math.log(1+yearly_interest_rate) > 0)
+			{
+				monthly = (int)Math.round((-Math.log(1-payment_ratio))/Math.log(1+yearly_interest_rate));
+			}else
+			{
+				/* Error */
+				monthly = -1;
+			}
 		}
 		return monthly;
 	}
@@ -64,17 +70,23 @@ public final class Loan
 		double yearly_interest_rate;
 		double value;
 		
-		yearly_interest_rate = (apr/100)/12;
-		
-		value = (amount/yearly_interest_rate)*(1-(Math.pow(1+yearly_interest_rate,-months)));
+		if(apr == 0)
+		{
+			value = (amount * months);
+			
+		}else
+		{
+			yearly_interest_rate = (apr/100)/12;
+			
+			value = (amount/yearly_interest_rate)*(1-(Math.pow(1+yearly_interest_rate,-months)));
+		}
 		
 		return value;
 	}
 	
-	public static double calculateAPR(double capital_amount, int monthly, double apr, double monthly_payment)
+	public static double calculateAPR(double capital_amount, int monthly, double monthly_payment)
 	{
 		double calculate_monthly_payment;
-		double yearly_interest_rate;
 		double final_APR = fix_rate;
 		double delta;
 		double start=0;
@@ -115,7 +127,7 @@ public final class Loan
 			delta = Math.abs(calculate_monthly_payment - monthly_payment);
 			if(delta < 0.3)
 			{
-				final_APR = mid;
+				final_APR = Math.round(mid);
 				break;
 			}
 			

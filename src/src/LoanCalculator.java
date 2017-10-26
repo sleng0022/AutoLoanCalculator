@@ -1,7 +1,6 @@
 package src;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -19,16 +18,10 @@ import javax.swing.JScrollPane;
 import java.text.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.print.*;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ChangeEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.border.*;

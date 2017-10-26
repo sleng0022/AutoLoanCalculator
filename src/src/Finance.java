@@ -12,7 +12,6 @@ public class Finance
 	private double value;
 	private int monthly;
 	private boolean invalid_num = false;
-	private double fix_rate = 2.6;
 	
 	DecimalFormat df = new DecimalFormat("#.##");
 	
@@ -53,7 +52,7 @@ public class Finance
 				payment = Double.parseDouble(monthly_payment);
 				if(amount > payment)
 				{
-					value = Loan.calculateAPR(amount, months, fix_rate ,payment);
+					value = Loan.calculateAPR(amount, months, payment);
 					if(value < 0 || value > 75)
 					{
 						invalid_num = true;
