@@ -75,10 +75,11 @@ public final class Loan
 	{
 		double calculate_monthly_payment;
 		double yearly_interest_rate;
-		double final_APR;
+		double final_APR = fix_rate;
 		double delta;
-		
-		yearly_interest_rate = (apr/100)/12;
+		double start=0;
+		double end = 0;
+		double temp_monthly_payment;
 		
 		if(((monthly_payment * monthly) - capital_amount) < -0.001)
 		{
@@ -86,22 +87,45 @@ public final class Loan
 			return final_APR;
 		}
 		
-		calculate_monthly_payment = calculateMonthlyPayment(capital_amount, monthly, apr);
-		delta = calculate_monthly_payment - monthly_payment;
-		
-		if(Math.abs((calculate_monthly_payment - monthly_payment)) <= 0.02)
+		/* First time run through if calculation amount with fix rate < actual amount, we start from 0 to fix rate.
+		 * Otherwise, we keep finding the end point when the calculation is > the actual amount. */
+		calculate_monthly_payment = calculateMonthlyPayment(capital_amount, monthly, final_APR);
+		if(calculate_monthly_payment >= monthly_payment)
 		{
-			final_APR = yearly_interest_rate * 12 * 100;
-			
-		}else if(calculate_monthly_payment < monthly_payment)
-		{
-			final_APR = calculateAPR(capital_amount, monthly, fix_rate += 0.01, monthly_payment);
-		}else if(calculate_monthly_payment > monthly_payment)
-		{
-			final_APR = calculateAPR(capital_amount, monthly, fix_rate -= 0.01, monthly_payment);
+			start = 0;
+			end = fix_rate;
 		}else
 		{
-			final_APR = -1;
+			temp_monthly_payment = monthly_payment;
+			start = fix_rate;
+			end = 1;
+			while(temp_monthly_payment > calculate_monthly_payment)
+			{
+				end = fix_rate * end;
+				calculate_monthly_payment = calculateMonthlyPayment(capital_amount, monthly, end);
+			}
+		}
+		
+		delta = Math.abs(calculate_monthly_payment - monthly_payment);
+		
+		while(Math.abs(delta) > .05)
+		{
+			double mid = (start + end)/2;
+			calculate_monthly_payment = calculateMonthlyPayment(capital_amount, monthly, mid);
+			delta = Math.abs(calculate_monthly_payment - monthly_payment);
+			if(delta < 0.3)
+			{
+				final_APR = mid;
+				break;
+			}
+			
+			if(monthly_payment < calculate_monthly_payment)
+			{
+				end = mid - 1;
+			}else
+			{
+				start = mid + 1;
+			}
 		}
 		
 		return final_APR;
