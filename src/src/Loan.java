@@ -94,7 +94,7 @@ public final class Loan
 			
 		}else
 		{
-			value = (monthly_payment * months) - (monthly_payment * (months-1));
+			value = (calculateMonthlyPayment(capital_amount, months, apr) * months) - (monthly_payment * (months-1));
 		}
 		
 		return value;

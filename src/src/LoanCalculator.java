@@ -1,3 +1,11 @@
+/**
+ * Copyright 2017 
+ * Car Loan project calculator.
+ * 
+ * 
+ * @author sinithleng
+ * @lastreview Oct 26, 2017
+ */
 package src;
 import java.awt.Color;
 import java.awt.EventQueue;
