@@ -127,7 +127,7 @@ public class LoanCalculator {
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				if((Integer.parseInt(months_textbox.getText()) < 12  || (Integer.parseInt(months_textbox.getText()) > 72)))
+				if((Integer.parseInt(months_textbox.getText()) < 2  || (Integer.parseInt(months_textbox.getText()) > 72)))
 				{
 					months_textbox.setBorder(InvalidInputBorder);		
 				}else
@@ -409,7 +409,7 @@ public class LoanCalculator {
 			if(valid == true)
 			{
 				if(((documents.get(0).getLength() > 0 && Double.parseDouble(CapitalAmount_textbox.getText()) <= 0)) ||
-				   ((documents.get(1).getLength() > 0) && ((Integer.parseInt(months_textbox.getText()) < 12) || (Integer.parseInt(months_textbox.getText()) > 72))) ||
+				   ((documents.get(1).getLength() > 0) && ((Integer.parseInt(months_textbox.getText()) < 2) || (Integer.parseInt(months_textbox.getText()) > 72))) ||
 				   ((documents.get(2).getLength() > 0) && (Double.parseDouble(APR_textbox.getText()) < 0 || Double.parseDouble(APR_textbox.getText()) > 75)) ||
 				   (documents.get(3).getLength() > 0 && (Double.parseDouble(MonthlyPayment_textbox.getText()) <= 0)))
 				{

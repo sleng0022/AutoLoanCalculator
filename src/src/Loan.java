@@ -13,7 +13,7 @@ public final class Loan
 		
 		if(apr == 0)
 		{
-			monthly =  Math.round((int)(capital_amount / monthly_payment));
+			monthly =  (int)Math.round(capital_amount / monthly_payment);
 		}else
 		{
 			yearly_interest_rate = (apr/100)/12;
@@ -109,7 +109,7 @@ public final class Loan
 		double end = 0;
 		double temp_monthly_payment;
 		
-		if(((monthly_payment * monthly) - capital_amount) < -0.06)
+		if((Math.round(monthly_payment * monthly) - capital_amount) < -0.06)
 		{
 			final_APR = -1;
 			return final_APR;
@@ -136,12 +136,12 @@ public final class Loan
 		
 		delta = Math.abs(calculate_monthly_payment - monthly_payment);
 		
-		while(Math.abs(delta) > .05)
+		while(Math.abs(delta) > .01)
 		{
 			double mid = (start + end)/2;
 			calculate_monthly_payment = calculateMonthlyPayment(capital_amount, monthly, mid);
 			delta = Math.abs(calculate_monthly_payment - monthly_payment);
-			if(delta < 0.3)
+			if(delta < 0.01)
 			{
 				final_APR = Math.round(mid);
 				break;

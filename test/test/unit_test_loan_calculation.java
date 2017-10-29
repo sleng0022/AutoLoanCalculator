@@ -44,22 +44,27 @@ class unit_test_loan_calculation
 		/* Test 75% apr */
 		double apr_rate_75 = 0;
 		apr_rate_75 = Loan.calculateAPR(10000, 12, 1209.17);
-		assertEquals(75, apr_rate_75, 1); // TODO
+		assertEquals(75, apr_rate_75, .1); // TODO
 		
 		/* Test 0% apr */
 		double apr_rate_0 = 0;
-		apr_rate_0 = Loan.calculateAPR(10000, 12, 833.33);
-		assertEquals(0, apr_rate_0, 1); // TODO
+		apr_rate_0 = Loan.calculateAPR(1000, 30, 33.33);
+		assertEquals(0, apr_rate_0, .01); // TODO
 		
 		/* Test final payment */
 		double final_pay = 0;
 		final_pay = Loan.calculateFinalPayment(10000, 12, 0, 833.33);
-		assertEquals(833.34, final_pay, 1); // TODO
+		assertEquals(833.34, final_pay, .1); // TODO
 		
 		/* Test final pay with 12% APR*/
 		double final_pay_12 = 0;
 		final_pay_12 = Loan.calculateFinalPayment(10000, 12, 12, 888.49);
 		assertEquals(888.49, final_pay_12, 1); // TODO
+		
+		/* Test final pay with 0% APR*/
+		double final_pay_0 = 0;
+		final_pay_0 = Loan.calculateAPR(100, 3, 33.33);
+		assertEquals(0, final_pay_0, .01); // TODO
 	}
 
 }
